@@ -24,10 +24,15 @@ some_key = some value
 
 # API
 
+- The config key/value pairs are returned as a `BufMap`
+
 ```zig
+/// Caller responsible for de-initializing returned BufMap.
+/// Bytes are not kept in map.
 fromBytes(allocator: *mem.Allocator, bytes: []const u8) !BufMap
 ```
 
 ```zig
+/// Caller responsible for de-initializing returned BufMap
 fromFile(allocator: *mem.Allocator, path: []const u8, max_bytes: usize) !BufMap
 ```
