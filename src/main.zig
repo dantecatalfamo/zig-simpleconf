@@ -7,15 +7,14 @@ const testing = std.testing;
 
 /// Caller responsible for de-initializing returned BufMap.
 /// Bytes are not kept in map.
-pub fn fromBytes(allocator: *mem.Allocator, bytes: []const u8) !BufMap {
+pub fn fromBytes(allocator: mem.Allocator, bytes: []const u8) !BufMap {
     var map = BufMap.init(allocator);
     errdefer map.deinit();
-    var lines = mem.split(bytes, "\n");
+    var lines = mem.split(u8, bytes, "\n");
     while (lines.next()) |line| {
         var key_begin: u32 = 0;
         var key_end: u32 = 0;
         var value_begin: u32 = 0;
-        var value_end: u32 = 0;
         var split_location: u32 = 0;
         var key: []const u8 = undefined;
         var value: []const u8 = undefined;
@@ -51,7 +50,7 @@ pub fn fromBytes(allocator: *mem.Allocator, bytes: []const u8) !BufMap {
 }
 
 /// Caller responsible for de-initializing returned BufMap
-pub fn fromFile(allocator: *mem.Allocator, path: []const u8, max_bytes: usize) !BufMap {
+pub fn fromFile(allocator: mem.Allocator, path: []const u8, max_bytes: usize) !BufMap {
     var map = BufMap.init(allocator);
     errdefer map.deinit();
     var file_bytes = try std.fs.cwd().readFileAlloc(allocator, path, max_bytes);
